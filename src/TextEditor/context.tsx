@@ -1,7 +1,7 @@
 // Создадим React Context, с помощью которого будем прокидывать API редактора
 
 import * as React from 'react';
-import { EditorApi, useEditor } from '../components/Hooks/useEditor';
+import { EditorApi, useEditor } from './useEditor';
 
 const TextEditorContext = React.createContext<EditorApi | undefined>(undefined);
 
