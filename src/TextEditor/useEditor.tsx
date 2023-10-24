@@ -3,13 +3,15 @@ import {
   RichUtils
 } from 'draft-js';
 import * as React from 'react';
-import { BlockType } from "./config";
+import { BlockType, InlineStyle } from "./config";
 
 export type EditorApi = {
   state: EditorState;
   onChange: (state: EditorState) => void;
   toggleBlockType: (blockType: BlockType) => void;
   currentBlockType: BlockType;
+  toggleInlineStyle: (inlineStyle: InlineStyle) => void;
+  hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
 }
 
 export const useEditor = (html?: string): EditorApi => {
@@ -42,17 +44,38 @@ export const useEditor = (html?: string): EditorApi => {
     setState((currentState) => RichUtils.toggleBlockType(currentState, blockType))
   }, []);
 
+  /**
+   * Функция включения/выключения inline-cтиля
+   */
+  const toggleInlineStyle = React.useCallback((inlineStyle: InlineStyle) => {
+    setState((currentState) => RichUtils.toggleInlineStyle(currentState, inlineStyle))
+  }, []);
+
+  /**
+   * Функция, которая укажет, применен ли конкретный стиль для выделенного текста
+   */
+  const hasInlineStyle = React.useCallback((inlineStyle: InlineStyle) => {
+    /* Получаем иммутабельный Set с ключами стилей */
+    const currentStyle = state.getCurrentInlineStyle();
+    /* Проверяем содержится ли там переданный стиль */
+    return currentStyle.has(inlineStyle);
+  }, [state]);
+
   return React.useMemo(
     () => ({
       state,
       onChange: setState,
       toggleBlockType,
       currentBlockType,
+      toggleInlineStyle,
+      hasInlineStyle,
     }),
     [
       state,
       toggleBlockType,
       currentBlockType,
+      toggleInlineStyle,
+      hasInlineStyle,
     ]
   );
 }

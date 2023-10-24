@@ -3,11 +3,14 @@
 import * as React from 'react';
 import { EditorApi, useEditor } from './useEditor';
 
+/**
+ * Добовляем EditorApi в контекст
+ */
 const TextEditorContext = React.createContext<EditorApi | undefined>(undefined);
 
 /**
- *
- * @returns
+ * Получение содержания контекста
+ * @returns контекст
  */
 export const useEditorApi = () => {
   const context = React.useContext(TextEditorContext);
@@ -19,7 +22,7 @@ export const useEditorApi = () => {
 }
 
 /**
- *
+ * Провайдер контекста
  * @returns
  */
 export const TextEditorProvider = ({ children }: { children: React.ReactNode }) => {

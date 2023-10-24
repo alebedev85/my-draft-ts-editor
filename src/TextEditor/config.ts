@@ -27,7 +27,19 @@ export enum BlockType {
   default = 'unstyled',
 }
 
-// Cоздаем имутабельную (неизменяемую) карту блоков
+/**
+ * Enum с названиями типов стилей, а также новый стиль ACCENT (Будет менять цвет фона и цвет шрифта текста).
+ */
+export enum InlineStyle {
+  BOLD = 'BOLD',
+  ITALIC = 'ITALIC',
+  UNDERLINE = 'UNDERLINE',
+  ACCENT = 'ACCENT' // код нашего произвольного стиля
+}
+
+/**
+ * Cоздаем имутабельную (неизменяемую) карту блоков
+ * */
 const CUSTOM_BLOCK_RENDER_MAP = Immutable.Map({
   [BlockType.cite]: {
     element: 'cite',
@@ -36,3 +48,13 @@ const CUSTOM_BLOCK_RENDER_MAP = Immutable.Map({
 
 // Для того, чтобы не описывать стандартные блоки, объединим карту блоков по умолчанию с нашей при помощи метода  DefaultDraftBlockRenderMap.merge
 export const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.merge(CUSTOM_BLOCK_RENDER_MAP);
+
+/**
+ * Cоздаем имутабельную (неизменяемую) карту нового стиля
+ * */
+export const CUSTOM_STYLE_MAP = {
+  [InlineStyle.ACCENT]: {
+    backgroundColor: '#F7F6F3',
+    color: '#A41E68',
+  },
+};

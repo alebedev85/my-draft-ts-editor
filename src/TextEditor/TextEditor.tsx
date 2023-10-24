@@ -5,7 +5,7 @@ import { useEditorApi } from './context';
 import cn from 'classnames';
 import './TextEditor.scss';
 
-import { BLOCK_RENDER_MAP } from './config';
+import { BLOCK_RENDER_MAP, CUSTOM_STYLE_MAP } from './config';
 
 export type TextEditorProps = {
   className?: string;
@@ -21,6 +21,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ className }) => {
         editorState={state}
         onChange={onChange}
         blockRenderMap={BLOCK_RENDER_MAP}
+        customStyleMap={CUSTOM_STYLE_MAP}
       />
     </div>
   );
