@@ -12,13 +12,8 @@
     overflow:auto;
 
     &_active {
-      border: 1px solid #282c34;
-      box-shadow:
-      0px 0px 0px 0px #282c34,
-      inset 0px 0px 7px 0px #282c34,
-      0px 0px 4px 0px #282c34,
-      inset 0px 0px 0px 1px #282c34;
-      // border-radius: 2px;
+      background-color: #282c34;
+      color: white;
     }
   }
 }
