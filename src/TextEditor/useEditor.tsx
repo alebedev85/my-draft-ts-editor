@@ -19,6 +19,7 @@ export type EditorApi = {
   toggleInlineStyle: (inlineStyle: InlineStyle) => void;
   hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
   addLink: (url: string) => void;
+  setEntityData: (entityKey: string, data: Record<string, string>) => void;
 }
 
 export const useEditor = (html?: string): EditorApi => {
@@ -95,6 +96,23 @@ export const useEditor = (html?: string): EditorApi => {
     [addEntity]
   );
 
+  /**
+   * Перезаписываем данные Entity
+   */
+  const setEntityData = React.useCallback((entityKey: string, data: { [key: string]: any }) => {
+    setState((currentState) => {
+      /* Получаем текущий контент */
+      const content = currentState.getCurrentContent();
+      /* Объединяем текущие данные Entity с новыми */
+      const contentStateUpdated = content.mergeEntityData(
+        entityKey,
+        data,
+      )
+      /* Обновляем состояние редактора с указанием типа изменения */
+      return EditorState.push(currentState, contentStateUpdated, 'apply-entity');
+    })
+  }, []);
+
   return React.useMemo(
     () => ({
       state,
@@ -104,6 +122,7 @@ export const useEditor = (html?: string): EditorApi => {
       toggleInlineStyle,
       hasInlineStyle,
       addLink,
+      setEntityData
     }),
     [
       state,
@@ -112,6 +131,7 @@ export const useEditor = (html?: string): EditorApi => {
       toggleInlineStyle,
       hasInlineStyle,
       addLink,
+      setEntityData
     ]
   );
 }
