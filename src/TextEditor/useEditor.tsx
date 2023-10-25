@@ -1,10 +1,11 @@
 import {
   EditorState,
-  RichUtils
+  RichUtils,
+  CompositeDecorator,
+  DraftEntityMutability
 } from 'draft-js';
 import * as React from 'react';
-import { BlockType, InlineStyle } from "./config";
-import { CompositeDecorator } from 'draft-js';
+import { BlockType, InlineStyle, EntityType } from "./config";
 import LinkDecorator from './Link';
 
 /* Объединям декораторы в один */
@@ -17,6 +18,7 @@ export type EditorApi = {
   currentBlockType: BlockType;
   toggleInlineStyle: (inlineStyle: InlineStyle) => void;
   hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
+  addLink: (url: string) => void;
 }
 
 export const useEditor = (html?: string): EditorApi => {
@@ -66,6 +68,33 @@ export const useEditor = (html?: string): EditorApi => {
     return currentStyle.has(inlineStyle);
   }, [state]);
 
+  /**
+   * Общая функцию для добавления Entity
+   */
+  const addEntity = React.useCallback((entityType: EntityType, data: Record<string, string>, mutability: DraftEntityMutability) => {
+    setState((currentState) => {
+      /* Получаем текущий контент */
+      const contentState = currentState.getCurrentContent();
+      /* Создаем Entity с данными */
+      const contentStateWithEntity = contentState.createEntity(entityType, mutability, data);
+      /* Получаем уникальный ключ Entity */
+      const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      /* Обьединяем текущее состояние с новым */
+      const newState = EditorState.set(currentState, { currentContent: contentStateWithEntity });
+      /* Вставляем ссылку в указанное место */
+      return RichUtils.toggleLink(newState, newState.getSelection(), entityKey);
+    })
+  }, []);
+
+  /**
+  * Отдельная функция для добавления ссылки
+  */
+  const addLink = React.useCallback((url: string) => {
+    addEntity(EntityType.link, { url }, "MUTABLE");
+  },
+    [addEntity]
+  );
+
   return React.useMemo(
     () => ({
       state,
@@ -74,6 +103,7 @@ export const useEditor = (html?: string): EditorApi => {
       currentBlockType,
       toggleInlineStyle,
       hasInlineStyle,
+      addLink,
     }),
     [
       state,
@@ -81,6 +111,7 @@ export const useEditor = (html?: string): EditorApi => {
       currentBlockType,
       toggleInlineStyle,
       hasInlineStyle,
+      addLink,
     ]
   );
 }

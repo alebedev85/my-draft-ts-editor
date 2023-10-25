@@ -9,7 +9,17 @@ const INLINE_STYLES_CODES = Object.values(InlineStyle);
 
 const ToolPanel = () => {
 
-  const { toggleInlineStyle, hasInlineStyle } = useEditorApi();
+  const { toggleInlineStyle, hasInlineStyle, addLink } = useEditorApi();
+
+  /**
+   * Получаем адрес ссылки
+   */
+  const handlerAddLink = () => {
+    const url = prompt('URL:');
+    if (url) {
+      addLink(url);
+    }
+  }
 
   return (
     <div className="tool-panel">
@@ -32,6 +42,11 @@ const ToolPanel = () => {
           </button>
         );
       })}
+      <button
+        className="tool-panel__item"
+        onClick={handlerAddLink}>
+        LINK
+      </button>
     </div>
   );
 }
