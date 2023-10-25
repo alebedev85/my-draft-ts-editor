@@ -9,7 +9,13 @@ const INLINE_STYLES_CODES = Object.values(InlineStyle);
 
 const ToolPanel = () => {
 
-  const { toggleInlineStyle, hasInlineStyle, addLink } = useEditorApi();
+  const {
+    toggleInlineStyle,
+    hasInlineStyle,
+    addLink,
+    currentBlockType,
+    toggleBlockType
+  } = useEditorApi();
 
   /**
    * Получаем адрес ссылки
@@ -23,6 +29,57 @@ const ToolPanel = () => {
 
   return (
     <div className="tool-panel">
+      <button
+        className={cn(
+          "tool-panel__item",
+          currentBlockType === BlockType.default && "tool-panel__item_active"
+        )}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          toggleBlockType(BlockType.default);
+        }}
+      >
+        Стандартный
+      </button>
+      
+      <button
+        className={cn(
+          "tool-panel__item",
+          currentBlockType === BlockType.h1 && "tool-panel__item_active"
+        )}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          toggleBlockType(BlockType.h1);
+        }}
+      >
+        Заголовок
+      </button>
+
+      <button
+        className={cn(
+          "tool-panel__item",
+          currentBlockType === BlockType.h2 && "tool-panel__item_active"
+        )}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          toggleBlockType(BlockType.h2);
+        }}
+      >
+        Подзаголовок
+      </button>
+      <button
+        className={cn(
+          "tool-panel__item",
+          currentBlockType === BlockType.cite && "tool-panel__item_active"
+        )}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          toggleBlockType(BlockType.cite);
+        }}
+      >
+        Сноска
+      </button>
+
       {INLINE_STYLES_CODES.map((code) => {
         const onMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
