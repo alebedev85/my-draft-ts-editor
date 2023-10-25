@@ -4,6 +4,11 @@ import {
 } from 'draft-js';
 import * as React from 'react';
 import { BlockType, InlineStyle } from "./config";
+import { CompositeDecorator } from 'draft-js';
+import LinkDecorator from './Link';
+
+/* Объединям декораторы в один */
+const decorator = new CompositeDecorator([LinkDecorator]);
 
 export type EditorApi = {
   state: EditorState;
@@ -19,7 +24,7 @@ export const useEditor = (html?: string): EditorApi => {
   /**
    * Переменная со значением текущего типа блока, с помощью которой можно будет добавить элементу активное состояние
    */
-  const [state, setState] = React.useState(() => EditorState.createEmpty());
+  const [state, setState] = React.useState(() => EditorState.createEmpty(decorator));
 
   /**
    * Реализация currentBlockType

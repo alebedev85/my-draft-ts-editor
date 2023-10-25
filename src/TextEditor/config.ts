@@ -38,6 +38,13 @@ export enum InlineStyle {
 }
 
 /**
+ * Enum с перечислением типов Entity.
+ */
+export enum EntityType {
+  link = 'link',
+}
+
+/**
  * Cоздаем имутабельную (неизменяемую) карту блоков
  * */
 const CUSTOM_BLOCK_RENDER_MAP = Immutable.Map({
