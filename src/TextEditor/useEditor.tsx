@@ -2,10 +2,14 @@ import {
   EditorState,
   RichUtils,
   CompositeDecorator,
-  DraftEntityMutability
+  DraftEntityMutability,
+  DraftEditorCommand,
+  DraftHandleValue,
+  KeyBindingUtil,
+  getDefaultKeyBinding
 } from 'draft-js';
 import * as React from 'react';
-import { BlockType, InlineStyle, EntityType } from "./config";
+import { BlockType, InlineStyle, EntityType, KeyCommand } from "./config";
 import LinkDecorator from './Link';
 
 /* Объединям декораторы в один */
@@ -20,8 +24,18 @@ export type EditorApi = {
   hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
   addLink: (url: string) => void;
   setEntityData: (entityKey: string, data: Record<string, string>) => void;
+  handleKeyCommand: (
+    command: KeyCommand,
+    editorState: EditorState
+  ) => DraftHandleValue;
+  handlerKeyBinding: (e: React.KeyboardEvent) => KeyCommand | null;
 }
 
+/**
+ * Хук useEditor, со всей логикой редактора
+ * @param html
+ * @returns объект с состояниями редактора
+ */
 export const useEditor = (html?: string): EditorApi => {
 
   /**
@@ -113,6 +127,37 @@ export const useEditor = (html?: string): EditorApi => {
     })
   }, []);
 
+  /**
+   * Функция обработки команд сочетания клавиш
+   * Функция принимает на вход название команды и текущее состояние редактора,
+   * и должна вернуть одно из двух значений handled и not-handled
+   */
+  const handleKeyCommand = React.useCallback((command: KeyCommand, editorState: EditorState) => {
+    if (command === "accent") {
+      toggleInlineStyle(InlineStyle.ACCENT);
+      return "handled";
+    }
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      setState(newState);
+      return "handled";
+    }
+    return "not-handled";
+  },
+    [toggleInlineStyle]
+  );
+
+  /**
+   * Проверяем нажата ли клавиша q + ctrl/cmd для нашего стиля
+   * */
+  const handlerKeyBinding = React.useCallback((e: React.KeyboardEvent) => {
+    if (e.keyCode === 81 && KeyBindingUtil.hasCommandModifier(e)) {
+      return 'accent';
+    }
+
+    return getDefaultKeyBinding(e);
+  }, []);
+
   return React.useMemo(
     () => ({
       state,
@@ -122,7 +167,9 @@ export const useEditor = (html?: string): EditorApi => {
       toggleInlineStyle,
       hasInlineStyle,
       addLink,
-      setEntityData
+      setEntityData,
+      handleKeyCommand,
+      handlerKeyBinding,
     }),
     [
       state,
@@ -131,7 +178,9 @@ export const useEditor = (html?: string): EditorApi => {
       toggleInlineStyle,
       hasInlineStyle,
       addLink,
-      setEntityData
+      setEntityData,
+      handleKeyCommand,
+      handlerKeyBinding,
     ]
   );
 }

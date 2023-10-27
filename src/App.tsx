@@ -10,10 +10,8 @@ function App() {
         My Draft Text Editor
       </header>
       <main className="page">
-        <div className="editr-wrap">
           <ToolPanel />
           <TextEditor />
-        </div>
       </main>
     </TextEditorProvider>
   );

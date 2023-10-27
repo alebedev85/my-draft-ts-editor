@@ -3,6 +3,11 @@
   padding: 15px;
   cursor: text;
   box-shadow:  4px 4px #282c34;
+  width: 850px;
+
+  @media screen and (max-width: 890px) {
+    width: 93%;
+  }
 }
 
 .public-DraftEditor-content {

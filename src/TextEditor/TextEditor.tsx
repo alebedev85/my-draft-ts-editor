@@ -12,7 +12,7 @@ export type TextEditorProps = {
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({ className }) => {
-  const { state, onChange } = useEditorApi();
+  const { state, onChange, handleKeyCommand, handlerKeyBinding } = useEditorApi();
 
   return (
     <div className={cn("text-editor", className)}>
@@ -22,6 +22,8 @@ const TextEditor: React.FC<TextEditorProps> = ({ className }) => {
         onChange={onChange}
         blockRenderMap={BLOCK_RENDER_MAP}
         customStyleMap={CUSTOM_STYLE_MAP}
+        handleKeyCommand={handleKeyCommand}
+        keyBindingFn={handlerKeyBinding}
       />
     </div>
   );

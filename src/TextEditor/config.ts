@@ -1,6 +1,6 @@
 // Фаил конфигурации блоков
 import Immutable from 'immutable';
-import { DefaultDraftBlockRenderMap } from 'draft-js';
+import { DefaultDraftBlockRenderMap, DraftEditorCommand } from 'draft-js';
 
 /**
  * Enum с названиями типов блоков, а также новый блок сноски cite.
@@ -61,7 +61,9 @@ export const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.merge(CUSTOM_BLOCK_RE
  * */
 export const CUSTOM_STYLE_MAP = {
   [InlineStyle.ACCENT]: {
-    backgroundColor: '#F7F6F3',
-    color: '#A41E68',
+    backgroundColor: 'gray',
+    color: 'white',
   },
 };
+
+export type KeyCommand = DraftEditorCommand | 'accent'; // произвольная команда
