@@ -14,7 +14,8 @@ const ToolPanel = () => {
     hasInlineStyle,
     addLink,
     currentBlockType,
-    toggleBlockType
+    toggleBlockType,
+    toHtml,
   } = useEditorApi();
 
   /**
@@ -41,7 +42,7 @@ const ToolPanel = () => {
       >
         Стандартный
       </button>
-      
+
       <button
         className={cn(
           "tool-panel__item",
@@ -103,6 +104,14 @@ const ToolPanel = () => {
         className="tool-panel__item"
         onClick={handlerAddLink}>
         LINK
+      </button>
+      <button
+        className="tool-panel__item"
+        onClick={() => {
+          console.log(toHtml());
+        }}
+      >
+        Print
       </button>
     </div>
   );

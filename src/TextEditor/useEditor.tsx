@@ -3,7 +3,6 @@ import {
   RichUtils,
   CompositeDecorator,
   DraftEntityMutability,
-  DraftEditorCommand,
   DraftHandleValue,
   KeyBindingUtil,
   getDefaultKeyBinding
@@ -11,6 +10,7 @@ import {
 import * as React from 'react';
 import { BlockType, InlineStyle, EntityType, KeyCommand } from "./config";
 import LinkDecorator from './Link';
+import { HTMLtoState, stateToHTML } from "./convert";
 
 /* Объединям декораторы в один */
 const decorator = new CompositeDecorator([LinkDecorator]);
@@ -29,6 +29,7 @@ export type EditorApi = {
     editorState: EditorState
   ) => DraftHandleValue;
   handlerKeyBinding: (e: React.KeyboardEvent) => KeyCommand | null;
+  toHtml: () => string;
 }
 
 /**
@@ -41,7 +42,11 @@ export const useEditor = (html?: string): EditorApi => {
   /**
    * Переменная со значением текущего типа блока, с помощью которой можно будет добавить элементу активное состояние
    */
-  const [state, setState] = React.useState(() => EditorState.createEmpty(decorator));
+  const [state, setState] = React.useState(() =>
+    html
+      ? EditorState.createWithContent(HTMLtoState(html), decorator)
+      : EditorState.createEmpty(decorator)
+  );
 
   /**
    * Реализация currentBlockType
@@ -158,6 +163,13 @@ export const useEditor = (html?: string): EditorApi => {
     return getDefaultKeyBinding(e);
   }, []);
 
+  /**
+   * Функция для ковертации стейта в html
+   */
+  const toHtml = React.useCallback(() => {
+    return stateToHTML(state.getCurrentContent());
+  }, [state]);
+
   return React.useMemo(
     () => ({
       state,
@@ -170,6 +182,7 @@ export const useEditor = (html?: string): EditorApi => {
       setEntityData,
       handleKeyCommand,
       handlerKeyBinding,
+      toHtml
     }),
     [
       state,
@@ -181,6 +194,7 @@ export const useEditor = (html?: string): EditorApi => {
       setEntityData,
       handleKeyCommand,
       handlerKeyBinding,
+      toHtml
     ]
   );
 }
