@@ -1,4 +1,7 @@
-// Kомпонент окна редактора TextEditor:
+// Мы подключили базовый компонент Editor из пакета Draft.js.
+// Именно он создаст редактируемое поле и будет управлять содержимым.
+// Связываем его c ранее созданным API редактора.
+
 import * as React from 'react';
 import { Editor } from 'draft-js';
 import { useEditorApi } from './context';

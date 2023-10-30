@@ -1,4 +1,4 @@
-// Фаил конфигурации блоков
+// Фаил конфигурации с типами блоков и стилями текста
 import Immutable from 'immutable';
 import { DefaultDraftBlockRenderMap, DraftEditorCommand } from 'draft-js';
 

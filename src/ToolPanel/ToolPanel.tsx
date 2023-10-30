@@ -40,7 +40,7 @@ const ToolPanel = () => {
           toggleBlockType(BlockType.default);
         }}
       >
-        Стандартный
+        Без стиля
       </button>
 
       <button
