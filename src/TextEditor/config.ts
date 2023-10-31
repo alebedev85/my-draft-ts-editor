@@ -42,6 +42,7 @@ export enum InlineStyle {
  */
 export enum EntityType {
   link = 'link',
+  hashtag = 'Hashtag'
 }
 
 /**

@@ -10,10 +10,11 @@ import {
 import * as React from 'react';
 import { BlockType, InlineStyle, EntityType, KeyCommand } from "./config";
 import LinkDecorator from './Link';
+import HashtagDecorator from './Hashtag';
 import { HTMLtoState, stateToHTML } from "./convert";
 
 /* Объединям декораторы в один */
-const decorator = new CompositeDecorator([LinkDecorator]);
+const decorator = new CompositeDecorator([LinkDecorator, HashtagDecorator]);
 
 export type EditorApi = {
   state: EditorState;

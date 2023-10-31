@@ -24,6 +24,7 @@ const Link = ({ contentState, entityKey, children } : LinkProps) => {
    * Обрабатываем клик в компоненте
    */
   const handlerClick = () => {
+    console.log(entityKey)
     const newUrl = prompt('URL:', url);
     if (newUrl) {
       setEntityData(entityKey, { url: newUrl });
